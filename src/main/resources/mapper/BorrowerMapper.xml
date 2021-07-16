@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.utdallas.cs4347.library.mapper.BorrowerMapper">
+
+    <resultMap id="BorrowerResultMap" type="edu.utdallas.cs4347.library.domain.Borrower">
+        <id column="card_id" property="cardNumber" jdbcType="VARCHAR" />
+        <result column="bname" property="name" jdbcType="VARCHAR" />
+        <result column="ssn" property="ssn" jdbcType="BIGINT" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+
+    </resultMap>
+
+
+    <sql id="Borrower_Column_List" >
+        card_id, bname, ssn, address, phone
+    </sql>
+
+    <select id="getAll" resultMap="BorrowerResultMap">
+        select
+        <include refid="Borrower_Column_List" />
+        from
+            BORROWER;
+    </select>
+
+
+    <select id="getOneByCard" parameterType="java.lang.String" resultMap="BorrowerResultMap" >
+        SELECT
+        <include refid="Borrower_Column_List" />
+        FROM BORROWER
+        WHERE card_id = #{cardId}
+    </select>
+
+
+    <select id="getOneBySsn" parameterType="java.lang.String" resultMap="BorrowerResultMap" >
+        SELECT
+        <include refid="Borrower_Column_List" />
+        FROM BORROWER
+        WHERE ssn = #{ssn}
+    </select>
+
+
+    <insert id="insert" parameterType="edu.utdallas.cs4347.library.domain.Borrower" keyColumn="card_id" keyProperty="cardNumber" useGeneratedKeys="true">
+        INSERT INTO
+            BORROWER
+            (bname, ssn, address, phone)
+        VALUES
+            (#{name}, #{ssn}, #{address}, #{phone})
+
+        </insert>
+
+
+    <update id="update" parameterType="edu.utdallas.cs4347.library.domain.Borrower" >
+        UPDATE
+            BORROWER
+        SET
+        <if test="name != null">name = #{name},</if>
+        <if test="ssn != null">ssn = #{ssn},</if>
+        <if test="phone != null">phone = #{phone},</if>
+        <if test="address != null">address = #{address},</if>
+        WHERE
+        id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.String" >
+        DELETE FROM
+            BORROWER
+        WHERE
+            card_id = #{cardId}
+    </delete>
+
+</mapper>

@@ -1,23 +1,28 @@
 package edu.utdallas.cs4347.library.domain;
 
+import java.util.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-public class Borrower { 
+@Entity
+public class Borrower {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String cardNumber;
 
     private String address;
 
     private String phone;
 
-    private String Bname;
+    private String name;
 
-    private String ssn;
+    private Long ssn;
 
-    public Borrower() { 
-
-    }
-
-    public void setCardNumber(String cn) { 
+    public void setCardNumber(String cn) {
         this.cardNumber = cn;
     }
 
@@ -29,15 +34,15 @@ public class Borrower {
         this.phone = ph;
     }
 
-    public void setBName(String name) { 
-        this.Bname = name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setSsn(String ssn) { 
+    public void setSsn(Long ssn) {
         this.ssn = ssn;
     }
 
-    public String getCardNumber() { 
+    public String getCardNumber() {
         return this.cardNumber;
     }
 
@@ -49,12 +54,22 @@ public class Borrower {
         return this.phone;
     }
 
-    public String getBName() { 
-        return this.Bname;
+    public String getName() {
+        return this.name;
     }
 
-    public String getSsn() {
+    public Long getSsn() {
         return this.ssn;
+    }
+
+    public String toString() { 
+        return "Borrower{" + 
+        "name='" + name +  '\'' +
+        "ssn='" + ssn +  '\'' +
+        "phone='" + phone +  '\'' +
+        "address='" + address +  '\'' +
+        "cardNumber='" + cardNumber + '}';
+             
     }
 
 }

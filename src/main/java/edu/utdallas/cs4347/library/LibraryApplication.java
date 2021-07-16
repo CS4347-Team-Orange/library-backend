@@ -1,9 +1,11 @@
 package edu.utdallas.cs4347.library;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
+@MapperScan("edu.utdallas.cs4347.library")
 public class LibraryApplication {
 
 	public static void main(String[] args) {
