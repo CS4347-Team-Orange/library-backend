@@ -50,11 +50,18 @@ Take a look at the `mapper` package, it holds an interface that maps domain obje
 
 # Testing the API
 
-## Get Borrowers
+## Get All Borrowers
 
 ```
 curl http://localhost:8080/api/borrower/
 ```
+
+## Get One Borrower
+
+```
+curl http://localhost:8080/api/borrower/${BORROWER_ID}
+```
+
 
 ## Create a Borrower
 
@@ -72,7 +79,7 @@ Notice how the JSON field names match exactly what's in the `Borrower.java` doma
 ```
 curl http://localhost:8080/api/borrower/ \
  -X PATCH \
- --data-raw '{"cardNumber": "e3770212-e68a-11eb-ac38-0242ac150002", name": "John Johnson", "ssn": 1234567890, "address": "123 NE Street, Fairfax, VA 12345", "phone": "1234567890"}' \
+ --data-raw '{"cardNumber": "e3770212-e68a-11eb-ac38-0242ac150002", "name": "John Johnson", "ssn": 1234567890, "address": "123 NE Street, Fairfax, VA 12345", "phone": "1234567890"}' \
  -H "Content-Type: application/json"
 ```
 

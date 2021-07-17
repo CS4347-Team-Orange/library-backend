@@ -20,6 +20,17 @@ public class LibraryResponse {
         this.message = s;
     }
 
+    public LibraryResponse(int code, String s) {
+        this.code = code;
+        this.message = s;
+    }
+
+    public LibraryResponse(int code, String s, Object o) {
+        this.code = code;
+        this.message = s;
+        this.data = o;
+    }
+
     public String getMessage() {
         return this.message;
     }

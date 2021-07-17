@@ -54,12 +54,12 @@
         UPDATE
             BORROWER
         SET
-        <if test="name != null">name = #{name},</if>
-        <if test="ssn != null">ssn = #{ssn},</if>
-        <if test="phone != null">phone = #{phone},</if>
-        <if test="address != null">address = #{address},</if>
+            <if test="name != null">bname = #{name},</if>
+            <if test="ssn != null">ssn = #{ssn},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="address != null">address = #{address}</if>
         WHERE
-        id = #{id}
+            card_id = #{cardNumber}
     </update>
 
     <delete id="delete" parameterType="java.lang.String" >

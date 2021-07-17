@@ -42,6 +42,7 @@ public class Borrower {
         this.ssn = ssn;
     }
 
+
     public String getCardNumber() {
         return this.cardNumber;
     }
