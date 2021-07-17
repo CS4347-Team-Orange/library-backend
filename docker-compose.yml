@@ -1,0 +1,6 @@
+version: '3'
+services:
+  frontend:
+    image: alex4108/library-backend
+    ports:
+      - 8080:8080
