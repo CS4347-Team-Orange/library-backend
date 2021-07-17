@@ -8,6 +8,4 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 script:
-      - echo "Logging in as ${DOCKER_USER}"
-      - echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
       - bash travis.sh
