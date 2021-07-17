@@ -28,7 +28,7 @@ sdk install java 11.0.11.hs-adpt
 
 ### Gradle, build & run the project
 
-Before trying to build, be sure you start the db with `bash start.sh` in the db project.
+Before trying to build, make sure postgres isn't already running - it'll come up when you run `bash start.sh` in here.
 
 From the project's root dir, `library-backend`, run `./gradlew bootRun`.  This will start the development server on http://localhost:8080
 

@@ -1,6 +1,16 @@
 version: '3'
 services:
-  frontend:
+  db:
+    image: alex4108/library-db
+    env_file:
+      - postgres.env
+    ports:
+      - 5432:5432
+  backend:
     image: alex4108/library-backend
     ports:
       - 8080:8080
+    depends_on:
+      - db
+    links:
+      - 'db:db'

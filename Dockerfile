@@ -11,4 +11,4 @@ RUN mkdir /app
 
 COPY --from=build /home/gradle/src/build/libs/library-0.0.1-SNAPSHOT.jar /app/spring-boot-application.jar
 
-ENTRYPOINT ["java","-jar","/app/spring-boot-application.jar"]
+ENTRYPOINT ["java","-Dspring.datasource.url=jdbc:postgresql://db:5432/library","-jar","/app/spring-boot-application.jar"]
