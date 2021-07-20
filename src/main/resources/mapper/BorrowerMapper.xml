@@ -4,16 +4,20 @@
 
     <resultMap id="BorrowerResultMap" type="edu.utdallas.cs4347.library.domain.Borrower">
         <id column="card_id" property="cardNumber" jdbcType="VARCHAR" />
-        <result column="bname" property="name" jdbcType="VARCHAR" />
-        <result column="ssn" property="ssn" jdbcType="BIGINT" />
+        <result column="first_name" property="firstName" jdbcType="VARCHAR" />
+        <result column="last_name" property="lastName" jdbcType="VARCHAR" />
+        <result column="ssn" property="ssn" jdbcType="VARCHAR" />
         <result column="address" property="address" jdbcType="VARCHAR" />
         <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="city" property="city" jdbcType="VARCHAR" />
+        <result column="state" property="state" jdbcType="VARCHAR" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
 
     </resultMap>
 
 
     <sql id="Borrower_Column_List" >
-        card_id, bname, ssn, address, phone
+        card_id, first_name, last_name, email, city, state, ssn, address, phone
     </sql>
 
     <select id="getAll" resultMap="BorrowerResultMap">
@@ -43,9 +47,9 @@
     <insert id="insert" parameterType="edu.utdallas.cs4347.library.domain.Borrower" keyColumn="card_id" keyProperty="cardNumber" useGeneratedKeys="true">
         INSERT INTO
             BORROWER
-            (bname, ssn, address, phone)
+            (ssn, first_name, last_name, email, address, city, state, phone)
         VALUES
-            (#{name}, #{ssn}, #{address}, #{phone})
+            (#{ssn}, #{firstName}, #{lastName}, #{email}, #{address}, #{city}, #{state}, #{phone})
 
         </insert>
 

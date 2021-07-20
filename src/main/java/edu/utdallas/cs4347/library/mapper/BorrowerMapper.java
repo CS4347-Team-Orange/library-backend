@@ -5,7 +5,7 @@ import edu.utdallas.cs4347.library.domain.Borrower;
 public interface BorrowerMapper {
     List<Borrower> getAll();
 
-    Borrower getOneBySsn(int ssn);
+    Borrower getOneBySsn(String ssn);
 
     Borrower getOneByCard(String cardId);
 

@@ -18,59 +18,102 @@ public class Borrower {
 
     private String phone;
 
-    private String name;
+    private String firstName;
 
-    private Long ssn;
+    private String lastName;
 
-    public void setCardNumber(String cn) {
-        this.cardNumber = cn;
+    private String ssn;
+
+    private String email;
+
+    private String city;
+
+    private String state;
+
+    public String getCardNumber() {
+        return cardNumber;
     }
 
-    public void setAddress(String ad) { 
-        this.address = ad;
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
     }
 
-    public void setPhone(String ph) { 
-        this.phone = ph;
+    public String getAddress() {
+        return address;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public void setSsn(Long ssn) {
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getSsn() {
+        return ssn;
+    }
+
+    public void setSsn(String ssn) {
         this.ssn = ssn;
     }
 
-
-    public String getCardNumber() {
-        return this.cardNumber;
+    public String getEmail() {
+        return email;
     }
 
-    public String getAddress() { 
-        return this.address;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getPhone() { 
-        return this.phone;
+    public String getCity() {
+        return city;
     }
 
-    public String getName() {
-        return this.name;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public Long getSsn() {
-        return this.ssn;
+    public String getState() {
+        return state;
     }
 
-    public String toString() { 
-        return "Borrower{" + 
-        "name='" + name +  '\'' +
-        "ssn='" + ssn +  '\'' +
-        "phone='" + phone +  '\'' +
-        "address='" + address +  '\'' +
-        "cardNumber='" + cardNumber + '}';
-             
+    public void setState(String state) {
+        this.state = state;
     }
 
+    @java.lang.Override
+    public java.lang.String toString() {
+        return "Borrower{" +
+                "cardNumber='" + cardNumber + '\'' +
+                ", address='" + address + '\'' +
+                ", phone='" + phone + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", ssn='" + ssn + '\'' +
+                ", email='" + email + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                '}';
+    }
 }
