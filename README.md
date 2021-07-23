@@ -159,9 +159,9 @@ curl http://localhost:8080/api/borrower/${BORROWER_ID}
 ## Create a Borrower
 
 ```
-curl http://localhost:8080/api/borrower/ \
+curl http://localhost:8080/api/book/ \
  -X POST \
- --data-raw '{"name": "John Smith", "ssn": 1234567890, "address": "123 NE Street, Fairfax, VA 12345", "phone": "1234567890"}' \
+ --data-raw '{"isbn10":"1558746218","isbn13":"9781558746213","title":"A Second Chicken Soup For The Woman's Soul (Chicken Soup For The Soul)","author":"Jack Canfield,Mark Victor Hansen,Jennifer Read Haw","cover":"http://www.openisbn.com/cover/1558746218_72.jpg","publisher":"HCI","pages":328}' \
  -H "Content-Type: application/json"
 ```
 

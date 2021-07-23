@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.utdallas.cs4347.library.mapper.BookMapper">
+
+    <resultMap id="BookResultMap" type="edu.utdallas.cs4347.library.domain.Book">
+        <id column="book_id" property="bookId" jdbcType="VARCHAR" />
+        <result column="isbn10" property="isbn10" jdbcType="VARCHAR" />
+        <result column="isbn13" property="isbn13" jdbcType="VARCHAR" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="author" property="author" jdbcType="VARCHAR" />
+        <result column="cover" property="cover" jdbcType="VARCHAR" />
+        <result column="publisher" property="publisher" jdbcType="VARCHAR" />
+        <result column="pages" property="pages" jdbcType="INTEGER" />
+
+    </resultMap>
+
+
+    <sql id="Book_Column_List" >
+        book_id, isbn10, isbn13, title, author, cover, publisher, pages
+    </sql>
+
+    <select id="getAll" resultMap="BookResultMap">
+        select
+        <include refid="Book_Column_List" />
+        from
+        Book;
+    </select>
+
+
+    <select id="getOneById" parameterType="java.lang.String" resultMap="BookResultMap" >
+        SELECT
+        <include refid="Book_Column_List" />
+        FROM Book
+        WHERE book_id = #{bookId}
+    </select>
+
+
+    <insert id="insert" parameterType="edu.utdallas.cs4347.library.domain.Book" keyColumn="book_id" keyProperty="bookId" useGeneratedKeys="true">
+        INSERT INTO
+        Book
+        (isbn10, isbn13, title, author, cover, publisher, pages)
+        VALUES
+        (#{isbn10}, #{isbn13}, #{title}, #{author}, #{cover}, #{publisher}, #{pages})
+
+    </insert>
+
+
+    <update id="update" parameterType="edu.utdallas.cs4347.library.domain.Book" >
+        UPDATE
+        Book
+        SET
+        <if test="isbn10 != null">isbn10 = #{isbn10},</if>
+        <if test="isbn13 != null">isbn13 = #{isbn13},</if>
+        <if test="title != null">title = #{title},</if>
+        <if test="author != null">author = #{author},</if>
+        <if test="cover != null">cover = #{cover},</if>
+        <if test="publisher != null">publisher = #{publisher},</if>
+        <if test="pages != null">pages = #{pages},</if>
+        WHERE
+        book_id = #{bookId}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.String" >
+        DELETE FROM
+        Book
+        WHERE
+        book_id = #{bookId}
+    </delete>
+
+</mapper>
