@@ -58,8 +58,12 @@
         UPDATE
             BORROWER
         SET
-            <if test="name != null">bname = #{name},</if>
+            <if test="firstName != null">first_name = #{firstName},</if>
+            <if test="lastName != null">last_name = #{lastName},</if>
             <if test="ssn != null">ssn = #{ssn},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="state != null">state = #{state},</if>
             <if test="phone != null">phone = #{phone},</if>
             <if test="address != null">address = #{address}</if>
         WHERE
@@ -70,7 +74,7 @@
         DELETE FROM
             BORROWER
         WHERE
-            card_id = #{cardId}
+            card_id = #{cardNumber}
     </delete>
 
 </mapper>

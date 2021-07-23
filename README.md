@@ -172,7 +172,7 @@ Notice how the JSON field names match exactly what's in the `Borrower.java` doma
 ```
 curl http://localhost:8080/api/borrower/ \
  -X PATCH \
- --data-raw '{"cardNumber": "e3770212-e68a-11eb-ac38-0242ac150002", "name": "John Johnson", "ssn": 1234567890, "address": "123 NE Street, Fairfax, VA 12345", "phone": "1234567890"}' \
+ --data-raw '{"cardNumber":"ID000005","address":"41260 Kedzie Terrace","phone":"(469) 213-2549","firstName":"Linda","lastName":"Queen","ssn":"906-63-3588","email":"lking4@illinois.edu","city":"Dallas","state":"TX"}' \
  -H "Content-Type: application/json"
 ```
 
