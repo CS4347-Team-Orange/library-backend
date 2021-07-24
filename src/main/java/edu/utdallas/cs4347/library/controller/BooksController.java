@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.dao.DataAccessException;
 
 import edu.utdallas.cs4347.library.domain.*;
 import edu.utdallas.cs4347.library.mapper.*;
@@ -63,7 +64,13 @@ public class BooksController {
     @PostMapping("/")
     public LibraryResponse add(@RequestBody Book b) {
         LibraryResponse resp = new LibraryResponse();
-        bookMapper.insert(b);
+        try { 
+            bookMapper.insert(b);
+        } catch (DataAccessException e) { 
+            log.error("Error inserting", e);
+            return new LibraryResponse(1, "Error inserting to database" + e.getMessage());
+        }
+        
         log.info("Inserted book: " + b.toString());
         resp.setData( bookMapper.getOneById( b.getBookId() ) );
         return resp;

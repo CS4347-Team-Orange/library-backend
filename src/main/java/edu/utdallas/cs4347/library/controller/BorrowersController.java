@@ -63,7 +63,13 @@ public class BorrowersController {
     @PostMapping("/")
     public LibraryResponse add(@RequestBody Borrower b) {
         LibraryResponse resp = new LibraryResponse();
-	    borrowerMapper.insert(b);
+	    //try { 
+            borrowerMapper.insert(b);
+        // } catch(Excption e) { 
+        //     log.error("Exception returned by psql", e);
+        //     return new LibraryResponse(1, "Exception returned by database engine: " + e.getMessage());
+        // }
+        
         log.info("Inserted borrower: " + b.toString());
         resp.setData( borrowerMapper.getOneByCard( b.getCardNumber() ) );
         return resp;
