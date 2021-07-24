@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.utdallas.cs4347.library.mapper.LoanMapper">
+
+    <resultMap id="LoanMap" type="edu.utdallas.cs4347.library.domain.Loan">
+        <id column="loan_id" property="loan_id" jdbcType="VARCHAR" />
+        <result column="book_id" property="book_id" jdbcType="VARCHAR" />
+        <result column="card_id" property="card_id" jdbcType="VARCHAR" />
+        <result column="date_out" property="date_out" jdbcType="DATE" />
+        <result column="due_date" property="due_date" jdbcType="DATE" />
+        <result column="date_in" property="date_in" jdbcType="DATE" />
+
+    </resultMap>
+
+
+    <sql id="Loan_Column_List" >
+        loan_id, book_id, card_id, date_out, due_date, date_in
+    </sql>
+
+    <select id="getAll" resultMap="LoanMap">
+        select
+        <include refid="Loan_Column_List" />
+        from
+        BOOK_LOANS;
+    </select>
+
+
+    <select id="getByCard" parameterType="java.lang.String" resultMap="LoanMap" >
+        SELECT
+        <include refid="Loan_Column_List" />
+        FROM BOOK_LOANS
+        WHERE card_id = #{cardId}
+    </select>
+
+
+    <select id="getByBook" parameterType="java.lang.String" resultMap="LoanMap" >
+        SELECT
+        <include refid="Loan_Column_List" />
+        FROM BOOK_LOANS
+        WHERE book_id = #{book_id}
+    </select>
+
+    <select id="getById" parameterType="java.lang.String" resultMap="LoanMap" >
+        SELECT
+        <include refid="Loan_Column_List" />
+        FROM BOOK_LOANS
+        WHERE loan_id = #{loan_id}
+    </select>
+
+
+    <insert id="insert" parameterType="edu.utdallas.cs4347.library.domain.Loan" keyColumn="loan_id" keyProperty="loan_id" useGeneratedKeys="true">
+        INSERT INTO
+        BOOK_LOANS
+        (loan_id, book_id, card_id, date_out, due_date, date_in)
+        VALUES
+        (#{loan_id}, #{book_id}, #{card_id}, #{date_out}, #{due_date}, #{date_in})
+
+    </insert>
+
+    <update id="update" parameterType="edu.utdallas.cs4347.library.domain.Loan" >
+        UPDATE
+        BOOK_LOANS
+        SET
+        <if test="loan_id != null">loan_id = #{loan_id},</if>
+        <if test="book_id != null">book_id = #{book_id},</if>
+        <if test="card_id != null">card_id = #{card_id},</if>
+        <if test="date_out != null">date_out = #{date_out},</if>
+        <if test="due_date != null">due_date = #{due_date},</if>
+        <if test="date_in != null">date_in = #{date_in},</if>
+        WHERE
+        load_id = #{loan_id}
+    </update>
+
+</mapper>
