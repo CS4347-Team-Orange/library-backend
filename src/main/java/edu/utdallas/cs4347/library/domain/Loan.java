@@ -10,7 +10,10 @@ import javax.persistence.Table;
 @Entity
 public class Loan {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String loan_id;
+    
     private String book_id;
     private String card_id;
     private Date date_out;
