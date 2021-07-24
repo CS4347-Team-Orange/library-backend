@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.dao.DataAccessException;
 
 import edu.utdallas.cs4347.library.domain.*;
 import edu.utdallas.cs4347.library.mapper.*;
@@ -37,9 +38,9 @@ public class BorrowersController {
         try {
             borrowers = borrowerMapper.getAll();
             resp.setData( borrowers );
-        } catch (Exception e) {
-            log.error("Exception in list()", e);
-            return new LibraryResponse(123, "It's broken, captain!");
+        } catch (DataAccessException e) {
+            log.error("DataAccessException in list()", e);
+            return new LibraryResponse(123, "Can't get borrowers: " + e.getMessage());
         }
         return resp;
     }
@@ -53,9 +54,9 @@ public class BorrowersController {
         try {
             borrower = borrowerMapper.getOneByCard( cardNumber );
             resp.setData(borrower);
-        } catch (Exception e) {
-            log.error("Exception in getByCard()", e);
-            return new LibraryResponse(1, "Can't get by card number");
+        } catch (DataAccessException e) {
+            log.error("DataAccessException in getByCard()", e);
+            return new LibraryResponse(1, "Can't get by card number, db error: " + e.getMessage());
         }
         return resp;
     }
@@ -63,12 +64,12 @@ public class BorrowersController {
     @PostMapping("/")
     public LibraryResponse add(@RequestBody Borrower b) {
         LibraryResponse resp = new LibraryResponse();
-	    //try { 
+	    try { 
             borrowerMapper.insert(b);
-        // } catch(Excption e) { 
-        //     log.error("Exception returned by psql", e);
-        //     return new LibraryResponse(1, "Exception returned by database engine: " + e.getMessage());
-        // }
+        } catch(DataAccessException e) { 
+             log.error("Error adding borrower", e);
+             return new LibraryResponse(1, "Exception returned by database engine: " + e.getMessage());
+        }
         
         log.info("Inserted borrower: " + b.toString());
         resp.setData( borrowerMapper.getOneByCard( b.getCardNumber() ) );
@@ -78,7 +79,12 @@ public class BorrowersController {
     @PatchMapping("/")
     public LibraryResponse patch(@RequestBody Borrower b) {
         LibraryResponse resp = new LibraryResponse();
-        borrowerMapper.update(b);
+        try { 
+            borrowerMapper.update(b);
+        } catch(DataAccessException e) { 
+            log.error("Error editing borrower", e);
+            return new LibraryResponse(1, "Exception returned by database engine: " + e.getMessage());
+        }
         log.info("Updated borrower: " + b.toString());
         resp.setData( borrowerMapper.getOneByCard( b.getCardNumber() ) );
         return resp;
@@ -90,8 +96,13 @@ public class BorrowersController {
     ) {
 	    LibraryResponse resp = new LibraryResponse();
 	    log.info("Deleteing borrower: " + cardNumber);
-	    borrowerMapper.delete(cardNumber);
-	    return resp;
+	    try { 
+            borrowerMapper.delete(cardNumber);
+        } catch(DataAccessException e) { 
+            log.error("Error editing borrower", e);
+            return new LibraryResponse(1, "Exception returned by database engine: " + e.getMessage());
+        }
+        return resp;
     }
 
 }

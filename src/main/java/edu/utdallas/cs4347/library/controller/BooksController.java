@@ -38,9 +38,9 @@ public class BooksController {
         try {
             books = bookMapper.getAll();
             resp.setData( books );
-        } catch (Exception e) {
-            log.error("Exception in list()", e);
-            return new LibraryResponse(123, "It's broken, captain!");
+        } catch (DataAccessException e) {
+            log.error("DataAccessException in list()", e);
+            return new LibraryResponse(123, "Can't get books: " + e.getMessage());
         }
         return resp;
     }
@@ -54,9 +54,9 @@ public class BooksController {
         try {
             book = bookMapper.getOneById( bookId );
             resp.setData(book);
-        } catch (Exception e) {
+        } catch (DataAccessException e) {
             log.error("Exception in getById()", e);
-            return new LibraryResponse(1, "Can't get by book ID");
+            return new LibraryResponse(1, "Can't get book: " + e.getMessage());
         }
         return resp;
     }
@@ -68,7 +68,7 @@ public class BooksController {
             bookMapper.insert(b);
         } catch (DataAccessException e) { 
             log.error("Error inserting", e);
-            return new LibraryResponse(1, "Error inserting to database" + e.getMessage());
+            return new LibraryResponse(1, "Error inserting to database: " + e.getMessage());
         }
         
         log.info("Inserted book: " + b.toString());
@@ -79,7 +79,12 @@ public class BooksController {
     @PatchMapping("/")
     public LibraryResponse patch(@RequestBody Book b) {
         LibraryResponse resp = new LibraryResponse();
-        bookMapper.update(b);
+        try { 
+            bookMapper.update(b);
+        } catch (DataAccessException e) { 
+            log.error("Error patching", e);
+            return new LibraryResponse(1, "Error updating in database: " + e.getMessage());
+        }
         log.info("Updated book: " + b.toString());
         resp.setData( bookMapper.getOneById( b.getBookId() ) );
         return resp;
@@ -91,7 +96,12 @@ public class BooksController {
     ) {
         LibraryResponse resp = new LibraryResponse();
         log.info("Deleting book: " + bookId);
-        bookMapper.delete(bookId);
+        try { 
+            bookMapper.delete(bookId);
+        } catch (DataAccessException e) { 
+            log.error("Error deleting book", e);
+            return new LibraryResponse(1, "Error deleting in database: " + e.getMessage()); 
+        }
         return resp;
     }
 
