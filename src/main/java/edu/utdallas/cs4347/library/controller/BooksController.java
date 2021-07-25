@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.dao.DataAccessException;
@@ -28,11 +30,24 @@ public class BooksController {
 
     private static final Logger log = LogManager.getLogger(BooksController.class);
 
+    private static int obj_per_page = 100;
+
     @Autowired
     BookMapper bookMapper;
 
     @GetMapping("/")
-    public LibraryResponse list() {
+    public LibraryResponse list(@RequestParam(name = "page") String pageNumber) {
+        int pageNum = Integer.parseInt(pageNumber);
+        int offset = 0;
+        if (pageNum > 1) { 
+            offset = obj_per_page * (pageNum-1);
+        } else if (pageNum < 0) { 
+            return new LibraryResponse(1, "Can't get books, invalid page number");
+        } else {
+            return new LibraryResponse(1, "Kaboom trying to figure out page number");
+        }
+
+        RowBounds rb = new RowBounds(offset, obj_per_page);
         LibraryResponse resp = new LibraryResponse();
         List<Book> books = null;
         try {
