@@ -20,7 +20,7 @@ import org.springframework.dao.DataAccessException;
 
 import edu.utdallas.cs4347.library.domain.*;
 import edu.utdallas.cs4347.library.mapper.*;
-
+import edu.utdallas.cs4347.library.util.*;
 import edu.utdallas.cs4347.library.response.*;
 
 @RestController
@@ -30,28 +30,23 @@ public class BooksController {
 
     private static final Logger log = LogManager.getLogger(BooksController.class);
 
-    private static int obj_per_page = 100;
-
     @Autowired
     BookMapper bookMapper;
 
     @GetMapping("/")
-    public LibraryResponse list(@RequestParam(name = "page") String pageNumber) {
-        int pageNum = Integer.parseInt(pageNumber);
-        int offset = 0;
-        if (pageNum > 1) { 
-            offset = obj_per_page * (pageNum-1);
-        } else if (pageNum < 0) { 
-            return new LibraryResponse(1, "Can't get books, invalid page number");
-        } else {
-            return new LibraryResponse(1, "Kaboom trying to figure out page number");
+    public LibraryResponse list(@RequestParam(name = "page", required = false) String pageNumber) {
+        PaginatedController pc = new PaginatedController();
+        try { 
+            pc.setByPageNumber(pageNumber);
+        } catch(Exception e) { 
+            log.error(e);
+            return new LibraryResponse(123, "Pagination controller exploded: " + e.getMessage());
         }
-
-        RowBounds rb = new RowBounds(offset, obj_per_page);
+        RowBounds rb = pc.getRowBounds();
         LibraryResponse resp = new LibraryResponse();
         List<Book> books = null;
         try {
-            books = bookMapper.getAll();
+            books = bookMapper.getAll(rb);
             resp.setData( books );
         } catch (DataAccessException e) {
             log.error("DataAccessException in list()", e);

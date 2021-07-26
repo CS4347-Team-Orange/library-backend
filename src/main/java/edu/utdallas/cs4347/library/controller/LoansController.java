@@ -16,20 +16,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.dao.DataAccessException;
 
+
+import edu.utdallas.cs4347.library.exception.*;
 import edu.utdallas.cs4347.library.domain.*;
 import edu.utdallas.cs4347.library.mapper.*;
-
+import edu.utdallas.cs4347.library.util.*;
+import edu.utdallas.cs4347.library.service.*;
 import edu.utdallas.cs4347.library.response.*;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/api/borrower")
+@RequestMapping("/api/loan")
 public class LoansController {
 
     private static final Logger log = LogManager.getLogger(LoansController.class);
 
     @Autowired
     LoanMapper loanMapper;
+
+    @Autowired
+    LoanService loanService;
 
     @GetMapping("/")
     public LibraryResponse list() {
@@ -80,19 +86,22 @@ public class LoansController {
     @GetMapping("/checkOut/{bookId}/{cardId}")
     public LibraryResponse add(@PathVariable String cardId, @PathVariable String bookId) {
         LibraryResponse resp = new LibraryResponse();
-        Loan l = null;
+        String loanId = "";
         try {
-            l = new Loan();
-            l.setCard_id(cardId);
-            l.setBook_id(bookId);
-            loanMapper.insert(l);
+            loanId = loanService.checkout(bookId, cardId);
         } catch(DataAccessException e) {
             log.error("Error checking out book", e);
             return new LibraryResponse(1, "Exception returned by database engine: " + e.getMessage());
+        } catch(BookStateException e) { 
+            return new LibraryResponse(1, "Failed to check out book.  It's already checked out.");
+        } catch (ServiceException e) { 
+            return new LibraryResponse(1, e.getMessage());
+        } catch (Exception e) { 
+            return new LibraryResponse(1, "Something went horribly wrong trying to check the book out.");
         }
 
         log.info("Checked out book: " + bookId + "\n" + cardId);
-        resp.setData( loanMapper.getById( l.getLoan_id() ) );
+        resp.setData( loanMapper.getById( loanId ) );
         return resp;
     }
 
