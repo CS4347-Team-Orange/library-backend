@@ -18,6 +18,23 @@ public class BorrowerService {
     @Autowired
     private BorrowerMapper borrowerMapper;
 
+    public boolean missingRequiredField(Borrower b) {
+        if (
+            b.getFirstName() == null || b.getFirstName().equals("") ||
+            b.getLastName() == null || b.getLastName().equals("") ||
+            b.getAddress() == null || b.getAddress().equals("") ||
+            b.getPhone() == null || b.getPhone().equals("") ||
+            b.getSsn() == null || b.getSsn().equals("") ||
+            b.getEmail() == null || b.getEmail().equals("") ||
+            b.getCity() == null || b.getCity().equals("") ||
+            b.getState() == null || b.getState().equals("")
+        ) { 
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public boolean cardExists(String cardNumber) { 
         Borrower b = borrowerMapper.getOneByCard(cardNumber);
         if (b == null) {

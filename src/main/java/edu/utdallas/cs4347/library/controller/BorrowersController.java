@@ -15,11 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
 import javax.servlet.http.HttpServletResponse;
 
 import edu.utdallas.cs4347.library.domain.*;
 import edu.utdallas.cs4347.library.mapper.*;
-
+import edu.utdallas.cs4347.library.service.*;
 import edu.utdallas.cs4347.library.response.*;
 
 @RestController
@@ -31,6 +32,9 @@ public class BorrowersController {
 
     @Autowired
     BorrowerMapper borrowerMapper;
+
+    @Autowired
+    BorrowerService borrowerService;
 
     @GetMapping("/")
     public LibraryResponse list(
@@ -74,12 +78,20 @@ public class BorrowersController {
     ) {
         LibraryResponse resp = new LibraryResponse();
 	    try { 
+            if ( borrowerService.missingRequiredField(b) ) { 
+                response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
+                return new LibraryResponse(1, "All fields are required!");
+            }
             borrowerMapper.insert(b);
+        } catch(DuplicateKeyException e) { 
+            log.error("Error adding borrower", e);
+            response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
+            return new LibraryResponse(1, "SSN already exists for another borrower");
         } catch(DataAccessException e) { 
              log.error("Error adding borrower", e);
              response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
              return new LibraryResponse(1, "Exception returned by database engine: " + e.getMessage());
-        }
+        } 
         
         log.info("Inserted borrower: " + b.toString());
         resp.setData( borrowerMapper.getOneByCard( b.getCardNumber() ) );
