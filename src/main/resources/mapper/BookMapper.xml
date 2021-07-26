@@ -34,7 +34,6 @@
         WHERE book_id = #{bookId}
     </select>
 
-
     <insert id="insert" parameterType="edu.utdallas.cs4347.library.domain.Book" keyColumn="book_id" keyProperty="bookId" useGeneratedKeys="true">
         INSERT INTO
         Book

@@ -8,7 +8,6 @@ public interface LoanMapper {
     List<Loan> getByCard(String cardNumber);
     Loan getById(String loanId);
 
-
     void insert(Loan loan);
     void update(Loan loan);
 

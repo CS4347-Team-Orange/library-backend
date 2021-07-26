@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 public class Loan {
@@ -19,6 +20,9 @@ public class Loan {
     private Date date_out;
     private Date due_date;
     private Date date_in;
+
+    @Transient
+    private Book book;
 
     public String getLoan_id() {
         return loan_id;
@@ -66,6 +70,14 @@ public class Loan {
 
     public void setDate_in(Date date_in) {
         this.date_in = date_in;
+    }
+
+    public Book getBook() { 
+        return this.book;
+    }
+
+    public void setBook(Book b) { 
+        this.book = b;
     }
 
     @java.lang.Override

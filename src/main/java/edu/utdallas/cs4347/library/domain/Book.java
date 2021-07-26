@@ -74,6 +74,14 @@ public class Book {
         this.pages = pages;
     }
 
+    public void setCheckedOut(boolean b) { 
+        this.checkedOut = b;
+    }
+
+    public boolean getCheckedOut() { 
+        return this.checkedOut;
+    }
+
     @java.lang.Override
     public java.lang.String toString() {
         return "Book{" +
@@ -85,6 +93,7 @@ public class Book {
                 ", cover='" + cover + '\'' +
                 ", publisher='" + publisher + '\'' +
                 ", pages=" + pages +
+                ", checkedOut=" + checkedOut +
                 '}';
     }
 
@@ -99,5 +108,6 @@ public class Book {
     private String cover;
     private String publisher;
     private int pages;
+    private boolean checkedOut;
 
 }

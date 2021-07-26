@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.dao.DataAccessException;
-
+import javax.servlet.http.HttpServletResponse;
 
 import edu.utdallas.cs4347.library.exception.*;
 import edu.utdallas.cs4347.library.domain.*;
@@ -38,14 +38,18 @@ public class LoansController {
     LoanService loanService;
 
     @GetMapping("/")
-    public LibraryResponse list() {
+    public LibraryResponse list(
+        HttpServletResponse response
+    ) {
         LibraryResponse resp = new LibraryResponse();
         List<Loan> loans = null;
         try {
             loans = loanMapper.getAll();
+            loans = loanService.attachBook(loans);
             resp.setData( loans );
         } catch (DataAccessException e) {
             log.error("DataAccessException in list()", e);
+            response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
             return new LibraryResponse(123, "Can't get loans: " + e.getMessage());
         }
         return resp;
@@ -53,15 +57,19 @@ public class LoansController {
 
     @GetMapping("/book/{bookId}")
     public LibraryResponse getByBook(
-            @PathVariable String bookId
+            @PathVariable String bookId,
+            HttpServletResponse response
     ) {
         LibraryResponse resp = new LibraryResponse();
         List<Loan> loans = null;
         try {
             loans = loanMapper.getByBook( bookId );
+            loans = loanService.attachBook(loans);
+            Collections.reverse(loans);
             resp.setData(loans);
         } catch (DataAccessException e) {
             log.error("DataAccessException in getByBook()", e);
+            response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
             return new LibraryResponse(1, "Can't get by book, db error: " + e.getMessage());
         }
         return resp;
@@ -69,34 +77,46 @@ public class LoansController {
 
     @GetMapping("/card/{cardNumber}")
     public LibraryResponse getByCard(
-            @PathVariable String cardNumber
+            @PathVariable String cardNumber,
+            HttpServletResponse response
     ) {
         LibraryResponse resp = new LibraryResponse();
         List<Loan> loans = null;
         try {
             loans = loanMapper.getByCard( cardNumber );
+            loans = loanService.attachBook(loans);
+            Collections.reverse(loans);
             resp.setData(loans);
         } catch (DataAccessException e) {
             log.error("DataAccessException in getByCard()", e);
+            response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
             return new LibraryResponse(1, "Can't get by card number, db error: " + e.getMessage());
         }
         return resp;
     }
 
     @GetMapping("/checkOut/{bookId}/{cardId}")
-    public LibraryResponse add(@PathVariable String cardId, @PathVariable String bookId) {
+    public LibraryResponse add(
+        @PathVariable String cardId, 
+        @PathVariable String bookId,
+        HttpServletResponse response
+    ) {
         LibraryResponse resp = new LibraryResponse();
         String loanId = "";
         try {
             loanId = loanService.checkout(bookId, cardId);
         } catch(DataAccessException e) {
             log.error("Error checking out book", e);
+            response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
             return new LibraryResponse(1, "Exception returned by database engine: " + e.getMessage());
         } catch(BookStateException e) { 
+            response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
             return new LibraryResponse(1, "Failed to check out book.  It's already checked out.");
         } catch (ServiceException e) { 
+            response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
             return new LibraryResponse(1, e.getMessage());
         } catch (Exception e) { 
+            response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
             return new LibraryResponse(1, "Something went horribly wrong trying to check the book out.");
         }
 
@@ -105,19 +125,40 @@ public class LoansController {
         return resp;
     }
 
-    @GetMapping("/checkIn/{loanId}")
-    public LibraryResponse checkIn(@PathVariable String loanId) {
+    @GetMapping("/checkIn/book/{bookId}")
+    public LibraryResponse checkInWithBookid(
+        @PathVariable String bookId,
+        HttpServletResponse response
+    ) {
+        LibraryResponse resp = new LibraryResponse();
+        try {
+            loanService.checkin(bookId); 
+        } catch (ServiceException e) {
+            log.error("Error checking in book", e);
+            response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
+            return new LibraryResponse(1, "Exception returned by LoanService: " + e.getMessage());
+        }
+
+        log.info("Checked in book: " + bookId);
+        return resp;
+    }
+
+    @GetMapping("/checkIn/loan/{loanId}")
+    public LibraryResponse checkIn(
+        @PathVariable String loanId,
+        HttpServletResponse response
+    ) {
         LibraryResponse resp = new LibraryResponse();
         try {
             Loan l = loanMapper.getById(loanId);
-            l.setDate_in(new Date());
-            loanMapper.update(l);
-        } catch (DataAccessException e) {
+            loanService.checkin(l.getBook_id()); 
+        } catch (ServiceException e) {
             log.error("Error checking in book", e);
-            return new LibraryResponse(1, "Exception returned by database engine: " + e.getMessage());
+            response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
+            return new LibraryResponse(1, "Exception returned by LoanService: " + e.getMessage());
         }
 
-        log.info("Checked in book: " + loanId);
+        log.info("Checked in book via loan: " + loanId);
         return resp;
     }
 }

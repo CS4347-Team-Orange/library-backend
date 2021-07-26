@@ -8,6 +8,8 @@ public interface BookMapper {
 
     List<Book> getAll(RowBounds rb);
 
+    List<Book> search(String query, RowBounds rb);
+
     Book getOneById(String bookId);
 
     void insert(Book book);
