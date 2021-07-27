@@ -70,16 +70,8 @@ public class BookService {
         return this.attachCheckedOut(this.bookMapper.getOneById(bookId));
     }
 
-    public List<Book> search(String query, String pageNumber) throws ServiceException { 
-        PaginatedController pc = new PaginatedController();
-        try { 
-            pc.setByPageNumber(pageNumber);
-        } catch(Exception e) { 
-            log.error(e);
-            throw new ServiceException("Failed to paginate search result: " + e.getMessage());
-        }
-        RowBounds rb = pc.getRowBounds();
-        List<Book> result = bookMapper.getAll(rb);
+    public List<Book> search(String query) throws ServiceException { 
+        List<Book> result = bookMapper.getAll();
         List<Book> searchResult = new ArrayList<Book>();
         for (Book b : result) { 
             log.info(b);

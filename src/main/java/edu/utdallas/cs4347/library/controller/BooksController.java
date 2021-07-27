@@ -77,10 +77,7 @@ public class BooksController {
 
         List<Book> result = new ArrayList<Book>();
         try {
-            if (pageNumber == null) { 
-                pageNumber = "1";
-            }
-            result = bookService.search(query, pageNumber);
+            result = bookService.search(query);
         } catch (ServiceException e) { 
             log.error("Failed serach", e);
             response.setStatus( HttpServletResponse.SC_BAD_REQUEST );

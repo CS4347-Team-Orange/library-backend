@@ -47,7 +47,6 @@
         WHERE loan_id = #{loan_id}
     </select>
 
-
     <insert id="insert" parameterType="edu.utdallas.cs4347.library.domain.Loan" keyColumn="loan_id" keyProperty="loan_id" useGeneratedKeys="true">
         INSERT INTO
         BOOK_LOANS

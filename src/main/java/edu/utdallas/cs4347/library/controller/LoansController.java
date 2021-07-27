@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.dao.DataAccessException;
@@ -39,16 +40,25 @@ public class LoansController {
 
     @GetMapping("/")
     public LibraryResponse list(
+        @RequestParam(name = "query", required = false) String query,
         HttpServletResponse response
     ) {
         LibraryResponse resp = new LibraryResponse();
         List<Loan> loans = null;
         try {
-            loans = loanMapper.getAll();
+            if (query == null) { 
+                loans = loanMapper.getAll();
+            } else { 
+                loans = loanService.search(query);
+            }
             loans = loanService.attachBook(loans);
+            loans = loanService.attachBorrower(loans);
             resp.setData( loans );
         } catch (DataAccessException e) {
             log.error("DataAccessException in list()", e);
+            response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
+            return new LibraryResponse(123, "Can't get loans: " + e.getMessage());
+        } catch (ServiceException e) { 
             response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
             return new LibraryResponse(123, "Can't get loans: " + e.getMessage());
         }

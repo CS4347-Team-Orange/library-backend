@@ -24,6 +24,18 @@ public class Loan {
     @Transient
     private Book book;
 
+
+    @Transient
+    private Borrower borrower;
+
+    public Borrower getBorrower() { 
+        return this.borrower;
+    }
+
+    public void setBorrower(Borrower b) { 
+        this.borrower = b;
+    }
+
     public String getLoan_id() {
         return loan_id;
     }

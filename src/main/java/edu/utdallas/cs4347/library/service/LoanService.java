@@ -48,6 +48,15 @@ public class LoanService {
         return false;
     }
 
+    public List<Loan> attachBorrower(List<Loan> loans) { 
+        List<Loan> newList = new ArrayList<Loan>();
+        for(Loan l: loans) { 
+            l.setBorrower(borrowerMapper.getOneByCard(l.getCard_id()));
+            newList.add(l);
+        }
+        return newList;
+    }
+
     public List<Loan> attachBook(List<Loan> loans) { 
         List<Loan> newList = new ArrayList<Loan>();
         for (Loan l : loans) {
@@ -128,6 +137,26 @@ public class LoanService {
         }
         log.info("Borrower " + cardId + " has active loans: " + activeLoans); 
         return activeLoans;
+    }
+
+    public List<Loan> search(String query) throws ServiceException { 
+        // Search borrower names, book ids, and card id's
+        List<Loan> result = loanMapper.getAll();
+        result = attachBook(result);
+        result = attachBorrower(result);
+        List<Loan> searchResult = new ArrayList<Loan>();
+        for(Loan l : result) {
+            if (
+                (l.getBook().getBookId().toLowerCase().contains(query.toLowerCase())) ||
+                (l.getBorrower().getCardNumber().toLowerCase().contains(query.toLowerCase())) ||
+                (l.getBorrower().getFirstName().toLowerCase().contains(query.toLowerCase())) ||
+                (l.getBorrower().getLastName().toLowerCase().contains(query.toLowerCase())) ||
+                (l.getBook().getTitle().toLowerCase().contains(query.toLowerCase()))
+            ) { 
+                searchResult.add(l);
+            }
+        }
+        return searchResult;
     }
 
 }
