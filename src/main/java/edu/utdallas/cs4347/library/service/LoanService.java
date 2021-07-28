@@ -203,7 +203,9 @@ public class LoanService {
                 (l.getBorrower().getCardNumber().toLowerCase().contains(query.toLowerCase())) ||
                 (l.getBorrower().getFirstName().toLowerCase().contains(query.toLowerCase())) ||
                 (l.getBorrower().getLastName().toLowerCase().contains(query.toLowerCase())) ||
-                (l.getBook().getTitle().toLowerCase().contains(query.toLowerCase()))
+                (l.getBook().getTitle().toLowerCase().contains(query.toLowerCase())) ||
+                (l.getBook().getIsbn10().toLowerCase().contains(query.toLowerCase())) ||
+                (l.getBook().getIsbn13().toLowerCase().contains(query.toLowerCase()))
             ) { 
                 searchResult.add(l);
             }
