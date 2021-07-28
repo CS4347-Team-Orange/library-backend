@@ -1,6 +1,6 @@
 package edu.utdallas.cs4347.library.mapper;
 import java.util.*;
-import edu.utdallas.cs4347.library.domain.Borrower;
+import edu.utdallas.cs4347.library.domain.Fine;
 
 public interface FineMapper {
     List<Fine> getAll();

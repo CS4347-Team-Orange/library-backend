@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.dao.DataAccessException;
 
 import edu.utdallas.cs4347.library.domain.*;
+import edu.utdallas.cs4347.library.exception.*;
 import edu.utdallas.cs4347.library.mapper.*;
-
+import edu.utdallas.cs4347.library.service.*;
 import edu.utdallas.cs4347.library.response.*;
 
 @RestController
@@ -31,10 +32,23 @@ public class FinesController {
     @Autowired
     FineMapper fineMapper;
 
+    @Autowired
+    FineService fineService;
+
+    @GetMapping("/assess") 
+    public LibraryResponse assessFines() { 
+        try { 
+            fineService.assess();
+        } catch (ServiceException e) { 
+            return new LibraryResponse(1, "Failed to assess fines: " + e.getMessage());
+        }
+        return new LibraryResponse();
+    }
+
     @GetMapping("/")
     public LibraryResponse list() {
         LibraryResponse resp = new LibraryResponse();
-        List<Fine> Fines = null;
+        List<Fine> fines = null;
         try {
             fines = fineMapper.getAll();
             resp.setData( fines );
@@ -95,7 +109,7 @@ public class FinesController {
             @PathVariable String loan_id
     ) {
         LibraryResponse resp = new LibraryResponse();
-        log.info("Deleting borrower: " + cardNumber);
+        log.info("Deleting loan: " + loan_id);
         try {
             fineMapper.delete(loan_id);
         } catch(DataAccessException e) {
