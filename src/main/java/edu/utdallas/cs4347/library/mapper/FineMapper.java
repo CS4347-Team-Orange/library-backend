@@ -12,4 +12,7 @@ public interface FineMapper {
     void update(Fine fine);
 
     void delete(String loanId);
+
+    List<Fine> getUnpaid();
+
 }

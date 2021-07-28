@@ -6,6 +6,8 @@ public interface LoanMapper {
     List<Loan> getAll();
     List<Loan> getByBook(String bookId);
     List<Loan> getByCard(String cardNumber);
+    List<Loan> getCheckedOut();
+    List<Loan> getOverdue();
     Loan getById(String loanId);
     
     void insert(Loan loan);

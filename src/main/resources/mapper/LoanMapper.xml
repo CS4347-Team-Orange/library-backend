@@ -24,6 +24,23 @@
         BOOK_LOANS;
     </select>
 
+    <select id="getCheckedOut" resultMap="LoanMap">
+        SELECT
+            <include refid="Loan_Column_List" />
+        FROM BOOK_LOANS
+        WHERE date_in = null
+    </select>
+
+    <select id="getOverdue" resultMap="LoanMap">
+        SELECT
+            <include refid="Loan_Column_List" />
+        FROM BOOK_LOANS
+        WHERE 
+            date_in = null AND
+            date_out > NOW() - INTERVAL '14 days'
+    </select>
+
+    
 
     <select id="getByCard" parameterType="java.lang.String" resultMap="LoanMap" >
         SELECT

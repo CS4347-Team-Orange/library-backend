@@ -29,6 +29,12 @@
         WHERE loan_id = #{loan_id}
     </select>
 
+    <select id="getUnpaid" resultMap="FineMap" >
+        SELECT
+            <include refid="Fine_Column_List" />
+        FROM FINES
+        WHERE paid = false
+    </select>
 
     <insert id="insert" parameterType="edu.utdallas.cs4347.library.domain.Fine" keyColumn="loan_id" keyProperty="loan_id" useGeneratedKeys="true">
         INSERT INTO

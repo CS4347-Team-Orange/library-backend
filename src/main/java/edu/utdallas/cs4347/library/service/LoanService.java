@@ -30,6 +30,41 @@ public class LoanService {
     @Autowired
     private BorrowerService borrowerService;
 
+    public boolean isOverdue(Loan l) { 
+        Calendar c = new GregorianCalendar();
+        c.add(Calendar.DAY_OF_MONTH, -14);
+        Date FOURTEEN_DAYS_AGO = c.getTime();
+        log.info("Is loan " + l + " overdue?");
+        log.info("14 days ago: " + FOURTEEN_DAYS_AGO);
+        if (l == null) { 
+            return false;
+        } else {
+            log.info("Checking if loan is 14 days ago " + l.getDate_out().before(FOURTEEN_DAYS_AGO));
+            if (l.getDate_out().before(FOURTEEN_DAYS_AGO)) {
+                log.info("Checking if loan has a return date... " + l.getDate_in());
+                if (l.getDate_in() == null) { 
+                    return true;
+                }
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public List<Loan> getOverdueLoans() throws ServiceException { 
+        List<Loan> loans = new ArrayList<Loan>();
+
+        try { 
+            loans = loanMapper.getOverdue();
+        } catch (Exception e) { 
+            log.error("Error getting loans from database!", e);
+            throw new ServiceException(e.getMessage());
+        }
+
+        return loans;
+    }
+
     public boolean isCheckedOut(String bookId) throws ServiceException { 
         List<Loan> loans = new ArrayList<Loan>();
 
