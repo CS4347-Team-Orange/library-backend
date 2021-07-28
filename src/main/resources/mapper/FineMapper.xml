@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.utdallas.cs4347.library.mapper.FineMapper">
+
+    <resultMap id="FineMap" type="edu.utdallas.cs4347.library.domain.Fine">
+        <id column="loan_id" property="loan_id" jdbcType="VARCHAR" />
+        <result column="fine_amt" property="fine_amt" jdbcType="DECIMAL" />
+        <result column="paid" property="paid" jdbcType="BOOLEAN" />
+
+    </resultMap>
+
+
+    <sql id="Fine_Column_List" >
+        loan_id, fine_amt, paid
+    </sql>
+
+    <select id="getAll" resultMap="FineMap">
+        select
+        <include refid="Fine_Column_List" />
+        from
+        FINES;
+    </select>
+
+
+    <select id="getOneById" parameterType="java.lang.String" resultMap="FineMap" >
+        SELECT
+        <include refid="Fine_Column_List" />
+        FROM FINES
+        WHERE loan_id = #{loan_id}
+    </select>
+
+
+    <insert id="insert" parameterType="edu.utdallas.cs4347.library.domain.Fine" keyColumn="loan_id" keyProperty="loan_id" useGeneratedKeys="true">
+        INSERT INTO
+        FINES
+        (loan_id, fine_amt, paid)
+        VALUES
+        (#{loan_id}, #{fine_amt}, #{paid})
+
+    </insert>
+
+    <update id="update" parameterType="edu.utdallas.cs4347.library.domain.Fine" >
+        UPDATE
+        FINES
+        SET
+        <if test="loan_id != null">loan_id = #{loan_id},</if>
+        <if test="fine_amt != null">fine_amt = #{fine_amt},</if>
+        <if test="paid != null">paid = #{paid},</if>
+        WHERE
+        loan_id = #{loan_id}
+    </update>
+
+</mapper>
