@@ -51,6 +51,7 @@ public class FinesController {
         List<Fine> fines = null;
         try {
             fines = fineMapper.getAll();
+            fines = fineService.attachLoans(fines);
             resp.setData( fines );
         } catch (DataAccessException e) {
             log.error("DataAccessException in list()", e);
@@ -67,6 +68,7 @@ public class FinesController {
         Fine fine = null;
         try {
             fine = fineMapper.getOneById( loan_id );
+            fine = fineService.attachLoan(fine);
             resp.setData(fine);
         } catch (DataAccessException e) {
             log.error("DataAccessException in getById()", e);

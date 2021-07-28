@@ -30,6 +30,13 @@ public class LoanService {
     @Autowired
     private BorrowerService borrowerService;
 
+    public Loan getLoan(String loanId) {
+        Loan l = loanMapper.getById(loanId);
+        l = attachBorrower(l);
+        l = attachBook(l);
+        return l;
+    }
+
     public boolean isOverdue(Loan l) { 
         Calendar c = new GregorianCalendar();
         c.add(Calendar.DAY_OF_MONTH, -14);
@@ -81,6 +88,16 @@ public class LoanService {
             }
         }
         return false;
+    }
+
+    public Loan attachBook(Loan l) { 
+        l.setBook(bookMapper.getOneById(l.getBook_id())); 
+        return l;
+    }
+
+    public Loan attachBorrower(Loan l) { 
+        l.setBorrower(borrowerMapper.getOneByCard(l.getCard_id()));
+        return l;
     }
 
     public List<Loan> attachBorrower(List<Loan> loans) { 

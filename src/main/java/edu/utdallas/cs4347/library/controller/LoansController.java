@@ -75,6 +75,7 @@ public class LoansController {
         try {
             loans = loanMapper.getByBook( bookId );
             loans = loanService.attachBook(loans);
+            loans = loanService.attachBorrower(loans);
             Collections.reverse(loans);
             resp.setData(loans);
         } catch (DataAccessException e) {
@@ -95,6 +96,7 @@ public class LoansController {
         try {
             loans = loanMapper.getByCard( cardNumber );
             loans = loanService.attachBook(loans);
+            loans = loanService.attachBorrower(loans);
             Collections.reverse(loans);
             resp.setData(loans);
         } catch (DataAccessException e) {

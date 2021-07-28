@@ -61,7 +61,19 @@ public class FineService {
                     fineMapper.insert(f);
                 }
             }
-            
         }
+    }
+
+    public Fine attachLoan(Fine f) { 
+        f.setLoan(loanService.getLoan(f.getLoan_id())); 
+        return f;
+    }
+
+    public List<Fine> attachLoans(List<Fine> fines) { 
+        List<Fine> newList = new ArrayList<Fine>();
+        for(Fine f : fines) { 
+            newList.add(attachLoan(f));
+        }
+        return newList;
     }
 }
