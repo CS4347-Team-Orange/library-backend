@@ -30,6 +30,10 @@ public class Borrower {
 
     private String state;
 
+    public String getFullName() {
+        return this.firstName + " " + this.lastName;
+    }
+
     public String getCardNumber() {
         return cardNumber;
     }

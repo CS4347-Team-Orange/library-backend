@@ -2,6 +2,7 @@ package edu.utdallas.cs4347.library.controller;
 
 import java.util.*;
 
+import edu.utdallas.cs4347.library.exception.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,28 @@ public class BorrowersController {
             return new LibraryResponse(123, "Can't get borrowers: " + e.getMessage());
         }
         return resp;
+    }
+
+    @GetMapping("/search/{query}")
+    public LibraryResponse search(
+        @PathVariable String query,
+        HttpServletResponse response
+    ) {
+        LibraryResponse resp = new LibraryResponse();
+        if (query.equals("")) {
+            response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
+            return new LibraryResponse(1, "Search query is required for searching!.");
+        }
+
+        try {
+            List<Borrower> searchResult = borrowerService.search(query);
+            resp.setData(searchResult);
+        } catch(Exception e) {
+            return new LibraryResponse(1, "Exception occured while searching: " + e.getMessage());
+        }
+
+        return resp;
+
     }
 
     @GetMapping("/{cardNumber}")
