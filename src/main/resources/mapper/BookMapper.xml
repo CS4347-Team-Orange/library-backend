@@ -47,7 +47,7 @@
     <update id="update" parameterType="edu.utdallas.cs4347.library.domain.Book" >
         UPDATE
             Book
-        SET
+        <set>
             <if test="isbn10 != null">isbn10 = #{isbn10},</if>
             <if test="isbn13 != null">isbn13 = #{isbn13},</if>
             <if test="title != null">title = #{title},</if>
@@ -55,6 +55,7 @@
             <if test="cover != null">cover = #{cover},</if>
             <if test="publisher != null">publisher = #{publisher},</if>
             <if test="pages != null">pages = #{pages}</if>
+        </set>
         WHERE
             book_id = #{bookId}
     </update>

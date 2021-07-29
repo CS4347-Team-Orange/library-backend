@@ -48,10 +48,11 @@
     <update id="update" parameterType="edu.utdallas.cs4347.library.domain.Fine" >
         UPDATE
         FINES
-        SET
-        <if test="loan_id != null">loan_id = #{loan_id},</if>
-        <if test="fine_amt != null">fine_amt = #{fine_amt},</if>
-        <if test="paid != null">paid = #{paid},</if>
+        <set>
+            <if test="loan_id != null">loan_id = #{loan_id},</if>
+            <if test="fine_amt != null">fine_amt = #{fine_amt},</if>
+            <if test="paid != null">paid = #{paid},</if>
+        </set>
         WHERE
         loan_id = #{loan_id}
     </update>

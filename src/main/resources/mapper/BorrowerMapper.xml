@@ -57,7 +57,7 @@
     <update id="update" parameterType="edu.utdallas.cs4347.library.domain.Borrower" >
         UPDATE
             BORROWER
-        SET
+        <set>
             <if test="firstName != null">first_name = #{firstName},</if>
             <if test="lastName != null">last_name = #{lastName},</if>
             <if test="ssn != null">ssn = #{ssn},</if>
@@ -66,6 +66,7 @@
             <if test="state != null">state = #{state},</if>
             <if test="phone != null">phone = #{phone},</if>
             <if test="address != null">address = #{address}</if>
+        </set>
         WHERE
             card_id = #{cardNumber}
     </update>

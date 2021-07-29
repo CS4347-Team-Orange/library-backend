@@ -40,6 +40,18 @@ public class BookService {
         return listWithCheckedOut;
     }
 
+    public List<Book> getAll() throws ServiceException {
+        List<Book> books = new ArrayList<Book>();
+        try {
+            books = bookMapper.getAll();
+        } catch (DataAccessException e) {
+            log.error("Exception in getAll()", e);
+            throw new ServiceException("Can't get books " + e.getMessage());
+        }
+        books = this.attachCheckedOut(books);
+        return books;
+    }
+
     public List<Book> getAll(String pageNumber) throws ServiceException { 
         PaginatedController pc = new PaginatedController();
         try { 

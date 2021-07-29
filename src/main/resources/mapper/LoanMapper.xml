@@ -28,7 +28,7 @@
         SELECT
             <include refid="Loan_Column_List" />
         FROM BOOK_LOANS
-        WHERE date_in = null
+        WHERE date_in is null
     </select>
 
     <select id="getOverdue" resultMap="LoanMap">
@@ -36,8 +36,8 @@
             <include refid="Loan_Column_List" />
         FROM BOOK_LOANS
         WHERE 
-            date_in = null AND
-            date_out > NOW() - INTERVAL '14 days'
+            date_in is null AND
+            date_out &lt; NOW() - INTERVAL '14 days'
     </select>
 
     
@@ -76,12 +76,13 @@
     <update id="update" parameterType="edu.utdallas.cs4347.library.domain.Loan" >
         UPDATE
         BOOK_LOANS
-        SET
-        <if test="book_id != null">book_id = #{book_id},</if>
-        <if test="card_id != null">card_id = #{card_id},</if>
-        <if test="date_out != null">date_out = #{date_out},</if>
-        <if test="due_date != null">due_date = #{due_date},</if>
-        <if test="date_in != null">date_in = #{date_in}</if>
+        <set>
+            <if test="book_id != null">book_id = #{book_id},</if>
+            <if test="card_id != null">card_id = #{card_id},</if>
+            <if test="date_out != null">date_out = #{date_out},</if>
+            <if test="due_date != null">due_date = #{due_date},</if>
+            <if test="date_in != null">date_in = #{date_in}</if>
+        </set>
         WHERE
         loan_id = #{loan_id}
     </update>

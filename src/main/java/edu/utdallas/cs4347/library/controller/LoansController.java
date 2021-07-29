@@ -33,6 +33,12 @@ public class LoansController {
     private static final Logger log = LogManager.getLogger(LoansController.class);
 
     @Autowired
+    BookService bookService;
+
+    @Autowired
+    BorrowerMapper borrowerMapper;
+
+    @Autowired
     LoanMapper loanMapper;
 
     @Autowired
@@ -171,6 +177,71 @@ public class LoansController {
         }
 
         log.info("Checked in book via loan: " + loanId);
+        return resp;
+    }
+
+    @GetMapping("/seed")
+    public LibraryResponse seed(
+        HttpServletResponse response
+    ) {
+        log.info("Seeding...");
+        int borrowersCount = 50;
+        LibraryResponse resp = new LibraryResponse();
+        List<Loan> seeds = new ArrayList<Loan>();
+        List<String> cardIDs = new ArrayList<String>();
+        List<String> bookIDs = new ArrayList<String>();
+        try {
+            List<Borrower> borrowers = borrowerMapper.getAll();
+            List<Book> books = bookService.getAll();
+            Random rand = new Random();
+            for(int i = 0; i < borrowersCount; i++) {
+                cardIDs.add(borrowers.get(rand.nextInt(borrowers.size())).getCardNumber());
+            }
+            log.info("Selected " + cardIDs.size() + " Card IDs: " + cardIDs);
+
+            boolean addingBooks = true;
+            int booksAdded = 0;
+            int booksToAdd = 100;
+            while (addingBooks) {
+                Book b = books.get(rand.nextInt(books.size()));
+                if (! b.getCheckedOut() && ! bookIDs.contains(b.getBookId())) {
+                    bookIDs.add(b.getBookId());
+                    booksAdded++;
+                }
+                if (booksAdded == booksToAdd) {
+                    addingBooks = false;
+                }
+            }
+            log.info("Selected " + booksToAdd + " books.");
+            Calendar c = new GregorianCalendar();
+            c.add(Calendar.DAY_OF_MONTH, -19);
+            Date NINETEEN_DAYS_AGO = c.getTime();
+
+            Calendar c2 = new GregorianCalendar();
+            c2.add(Calendar.DAY_OF_MONTH, -5);
+            Date FIVE_DAYS_AGO = c2.getTime();
+
+
+            log.info("Seeding loans...");
+            for(int i = 0; i < booksToAdd; i++) {
+                int borrower = i % borrowersCount;
+                Loan l = new Loan();
+                l.setBook_id(bookIDs.get(i));
+                l.setCard_id(cardIDs.get(borrower));
+                loanMapper.insert(l);
+                l.setDate_out(NINETEEN_DAYS_AGO);
+                l.setDue_date(FIVE_DAYS_AGO);
+                loanMapper.update(l);
+                seeds.add(l);
+            }
+            log.info("Loan seeding completed.");
+        } catch (Exception e) {
+            log.error("Error seeding loans", e);
+            response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
+            return new LibraryResponse(1, "Exception returned seeding data: " + e.getMessage());
+        }
+
+        log.info("Seeded loans " + seeds);
         return resp;
     }
 }

@@ -59,7 +59,6 @@ public class Fine {
     private double fine_amt;
     private boolean paid;
 
-
     @Transient
     private Loan loan;
 
