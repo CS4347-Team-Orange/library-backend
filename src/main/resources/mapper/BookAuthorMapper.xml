@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.utdallas.cs4347.library.mapper.BookAuthorMapper">
+
+    <resultMap id="BookAuthorResultMap" type="edu.utdallas.cs4347.library.domain.BookAuthor">
+        <result column="author_id" property="authorId" jdbcType="VARCHAR" />
+        <result column="book_id" property="bookId" jdbcType="VARCHAR" />
+
+    </resultMap>
+
+
+    <sql id="BookAuthor_Column_list" >
+        author_id, book_id
+    </sql>
+
+    <select id="getAll" resultMap="BookAuthorResultMap">
+        select
+        <include refid="BookAuthor_Column_list" />
+        from
+        BOOK_AUTHORS;
+    </select>
+
+    <select id="getById" parameterType="java.lang.String" resultMap="BookAuthorResultMap" >
+        SELECT
+        <include refid="BookAuthor_Column_list" />
+        FROM BOOK_AUTHORS
+        WHERE author_id = #{authorId}, book_id = #{bookId}
+    </select>
+
+    <select id="getByBookId" parameterType="java.lang.String" resultMap="BookAuthorResultMap" >
+        SELECT
+        <include refid="BookAuthor_Column_list" />
+        FROM BOOK_AUTHORS
+        WHERE book_id = #{bookId}
+    </select>
+
+    <select id="getByAuthorId" parameterType="java.lang.String" resultMap="BookAuthorResultMap" >
+        SELECT
+        <include refid="BookAuthor_Column_list" />
+        FROM BOOK_AUTHORS
+        WHERE author_id = #{authorId}
+    </select>
+
+    <insert id="insert" parameterType="edu.utdallas.cs4347.library.domain.BookAuthor">
+        INSERT INTO
+            BOOK_AUTHORS
+            (book_id, author_id)
+        VALUES
+            (#{bookId}, #{authorId})
+
+    </insert>
+
+    <delete id="delete" parameterType="java.lang.String" >
+        DELETE FROM
+            BOOK_AUTHORS
+        WHERE
+            author_id = #{authorId} AND
+            book_id = #{bookId}
+    </delete>
+
+    <delete id="deleteBookId" parameterType="java.lang.String" >
+        DELETE FROM
+            BOOK_AUTHORS
+        WHERE
+            book_id = #{bookId}
+    </delete>
+
+    <delete id="deleteAuthorId" parameterType="java.lang.String" >
+        DELETE FROM
+            BOOK_AUTHORS
+        WHERE
+            author_id = #{authorId}
+    </delete>
+
+
+</mapper>

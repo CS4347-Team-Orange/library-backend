@@ -1,11 +1,7 @@
 package edu.utdallas.cs4347.library.domain;
 
 import java.util.*;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 public class Book {
@@ -82,6 +78,24 @@ public class Book {
         return this.checkedOut;
     }
 
+    public void setAuthors(List<Author> authors) {
+        this.authors = authors;
+        this.authorString = getAuthorString();
+    }
+
+    public List<Author> getAuthors() {
+        return this.authors;
+    }
+
+    public String getAuthorString() {
+        List<String> authorNames = new ArrayList<String>();
+        for (Author a : getAuthors()) {
+            authorNames.add(a.getName());
+        }
+        String s = String.join(", ", authorNames);
+        return s;
+    }
+
     @java.lang.Override
     public java.lang.String toString() {
         return "Book{" +
@@ -109,5 +123,12 @@ public class Book {
     private String publisher;
     private int pages;
     private boolean checkedOut;
+
+
+    @Transient
+    private List<Author> authors;
+
+    @Transient
+    private String authorString;
 
 }

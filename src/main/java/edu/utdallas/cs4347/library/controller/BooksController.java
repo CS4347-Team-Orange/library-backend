@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.dao.DataAccessException;
+
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 
 import edu.utdallas.cs4347.library.exception.*;
@@ -57,6 +59,29 @@ public class BooksController {
             response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
             return new LibraryResponse(123, "Can't get books: " + e.getMessage());
         } catch (ServiceException e) { 
+            log.error("ServiceException in list()", e);
+            response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
+            return new LibraryResponse(1, "Book Service Exception: " + e.getMessage());
+        }
+        return resp;
+    }
+
+    @GetMapping("/author/{authorId}")
+    public LibraryResponse getByAuthor(
+            @PathVariable String authorId,
+            HttpServletResponse response
+    ) {
+        LibraryResponse resp = new LibraryResponse();
+        List<Book> books = null;
+        try {
+
+            books = bookService.getByAuthor(authorId);
+            resp.setData( books );
+        } catch (DataAccessException e) {
+            log.error("DataAccessException in list()", e);
+            response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
+            return new LibraryResponse(123, "Can't get books: " + e.getMessage());
+        } catch (ServiceException e) {
             log.error("ServiceException in list()", e);
             response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
             return new LibraryResponse(1, "Book Service Exception: " + e.getMessage());
@@ -114,7 +139,7 @@ public class BooksController {
     ) {
         LibraryResponse resp = new LibraryResponse();
         try { 
-            bookMapper.insert(b);
+            bookService.insert(b);
         } catch (DataAccessException e) { 
             log.error("Error inserting", e);
             response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
@@ -133,7 +158,7 @@ public class BooksController {
     ) {
         LibraryResponse resp = new LibraryResponse();
         try { 
-            bookMapper.update(b);
+            bookService.update(b);
         } catch (DataAccessException e) { 
             log.error("Error patching", e);
             response.setStatus( HttpServletResponse.SC_BAD_REQUEST );
@@ -152,7 +177,7 @@ public class BooksController {
         LibraryResponse resp = new LibraryResponse();
         log.info("Deleting book: " + bookId);
         try { 
-            bookMapper.delete(bookId);
+            bookService.delete(bookId);
         } catch (DataAccessException e) { 
             log.error("Error deleting book", e);
             response.setStatus( HttpServletResponse.SC_BAD_REQUEST );

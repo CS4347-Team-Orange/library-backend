@@ -34,6 +34,20 @@
         WHERE book_id = #{bookId}
     </select>
 
+    <select id="getOneByIsbn10" parameterType="java.lang.String" resultMap="BookResultMap" >
+        SELECT
+        <include refid="Book_Column_List" />
+        FROM Book
+        WHERE isbn10 = #{isbn10}
+    </select>
+
+    <select id="getOneByIsbn13" parameterType="java.lang.String" resultMap="BookResultMap" >
+        SELECT
+        <include refid="Book_Column_List" />
+        FROM Book
+        WHERE isbn13 = #{isbn13}
+    </select>
+
     <insert id="insert" parameterType="edu.utdallas.cs4347.library.domain.Book" keyColumn="book_id" keyProperty="bookId" useGeneratedKeys="true">
         INSERT INTO
         Book

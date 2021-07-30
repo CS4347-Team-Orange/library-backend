@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.utdallas.cs4347.library.mapper.AuthorMapper">
+
+    <resultMap id="AuthorResultMap" type="edu.utdallas.cs4347.library.domain.Author">
+        <id column="author_id" property="authorId" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Author_Column_List" >
+        author_id, name
+    </sql>
+
+    <select id="getAll" resultMap="AuthorResultMap">
+        select
+        <include refid="Author_Column_List" />
+        from
+        AUTHORS
+    </select>
+
+    <select id="getOneById" parameterType="java.lang.String" resultMap="AuthorResultMap" >
+        SELECT
+        <include refid="Author_Column_List" />
+        FROM AUTHORS
+        WHERE author_id = #{authorId}
+    </select>
+
+    <insert id="insert" parameterType="edu.utdallas.cs4347.library.domain.Author" keyColumn="author_id" keyProperty="authorId" useGeneratedKeys="true">
+        INSERT INTO
+            AUTHORS
+            (name)
+        VALUES
+            (#{name})
+    </insert>
+
+    <update id="update" parameterType="edu.utdallas.cs4347.library.domain.Author" >
+        UPDATE
+        AUTHORS
+        SET
+        <if test="name != null">name = #{name}</if>
+        WHERE
+        author_id = #{authorId}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.String" >
+        DELETE FROM
+            AUTHORS
+        WHERE
+            author_id = #{authorId}
+    </delete>
+
+</mapper>

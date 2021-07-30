@@ -69,12 +69,12 @@ public class LoanService {
         List<Loan> loans = new ArrayList<Loan>();
         try {
             Book b = null;
-            b = bookService.getOneById(bookId);
+            b = bookMapper.getOneById(bookId);
             if (b == null) {
-                b = bookService.getOneByIsbn10(bookId);
+                b = bookMapper.getOneByIsbn10(bookId);
             }
             if (b == null) {
-                b = bookService.getOneByIsbn13(bookId);
+                b = bookMapper.getOneByIsbn13(bookId);
             }
             if (b == null) {
                 throw new ServiceException("Can't locate a book with that ID, ISBN10, or ISBN13.");

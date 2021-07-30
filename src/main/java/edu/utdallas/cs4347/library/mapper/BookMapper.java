@@ -10,6 +10,12 @@ public interface BookMapper {
 
     Book getOneById(String bookId);
 
+    Book getOneByIsbn13(String isbn10);
+
+    Book getOneByIsbn10(String isbn13);
+
+
+
     void insert(Book book);
 
     void update(Book book);
