@@ -214,11 +214,7 @@ public class BookService {
     }
 
     public void update(Book b) {
-        bookAuthorMapper.deleteBookId(b.getBookId());
-        bookMapper.delete(b.getBookId());
-
-        bookMapper.insert(b);
-        bookAuthorService.insertBook(b);
+        bookMapper.update(b);
     }
 
     public void delete(String bookId) {

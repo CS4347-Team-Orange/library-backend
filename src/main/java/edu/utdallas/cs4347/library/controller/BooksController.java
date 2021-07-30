@@ -165,7 +165,6 @@ public class BooksController {
             return new LibraryResponse(1, "Error updating in database: " + e.getMessage());
         }
         log.info("Updated book: " + b.toString());
-        resp.setData( bookMapper.getOneById( b.getBookId() ) );
         return resp;
     }
 
