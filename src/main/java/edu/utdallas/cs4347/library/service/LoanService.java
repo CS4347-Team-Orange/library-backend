@@ -93,9 +93,14 @@ public class LoanService {
         return false;
     }
 
-    public Loan attachBook(Loan l) { 
-        l.setBook(bookMapper.getOneById(l.getBook_id())); 
-        return l;
+    public Loan attachBook(Loan l) {
+        try {
+            l.setBook(bookService.getOneById(l.getBook_id()));
+            return l;
+        } catch (ServiceException e) {
+            log.error("Can't attach book", e);
+        }
+        return null;
     }
 
     public Loan attachBorrower(Loan l) { 
@@ -115,8 +120,13 @@ public class LoanService {
     public List<Loan> attachBook(List<Loan> loans) { 
         List<Loan> newList = new ArrayList<Loan>();
         for (Loan l : loans) {
-            l.setBook(bookMapper.getOneById(l.getBook_id())); 
-            newList.add(l);
+            try {
+                l.setBook(bookService.getOneById(l.getBook_id()));
+                newList.add(l);
+            } catch(ServiceException e) {
+                log.error("Trying to attach book", e);
+            }
+
         }
         return newList;
     }
