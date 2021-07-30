@@ -38,14 +38,6 @@ public class Book {
         this.title = title;
     }
 
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
     public String getCover() {
         return cover;
     }
@@ -103,7 +95,6 @@ public class Book {
                 ", isbn10='" + isbn10 + '\'' +
                 ", isbn13='" + isbn13 + '\'' +
                 ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
                 ", cover='" + cover + '\'' +
                 ", publisher='" + publisher + '\'' +
                 ", pages=" + pages +
@@ -118,7 +109,6 @@ public class Book {
     private String isbn10;
     private String isbn13;
     private String title;
-    private String author;
     private String cover;
     private String publisher;
     private int pages;
