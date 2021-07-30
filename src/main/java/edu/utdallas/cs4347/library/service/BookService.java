@@ -82,6 +82,47 @@ public class BookService {
         return this.attachCheckedOut(this.bookMapper.getOneById(bookId));
     }
 
+    public Book getOneByIsbn10(String isbn10) throws ServiceException {
+        Book foundBook = null;
+        try {
+            List<Book> result = this.bookMapper.getAll();
+            for(Book b : result) {
+                if (b.getIsbn10().equals(isbn10)) {
+                    foundBook = b;
+                    break;
+                }
+            }
+        } catch (DataAccessException e) {
+            log.error("Exception in getById()", e);
+            throw new ServiceException("Can't get book " + isbn10 + ": " + e.getMessage());
+        }
+        if (foundBook == null) {
+            throw new ServiceException("Can't locate book w/ that ISBN10");
+        }
+        return this.attachCheckedOut(foundBook);
+    }
+
+
+    public Book getOneByIsbn13(String isbn13) throws ServiceException {
+        Book foundBook = null;
+        try {
+            List<Book> result = this.bookMapper.getAll();
+            for(Book b : result) {
+                if (b.getIsbn13().equals(isbn13)) {
+                    foundBook = b;
+                    break;
+                }
+            }
+        } catch (DataAccessException e) {
+            log.error("Exception in getById()", e);
+            throw new ServiceException("Can't get book " + isbn13 + ": " + e.getMessage());
+        }
+        if (foundBook == null) {
+            throw new ServiceException("Can't locate book w/ that ISBN10");
+        }
+        return this.attachCheckedOut(foundBook);
+    }
+
     public List<Book> search(String query) throws ServiceException { 
         List<Book> result = bookMapper.getAll();
         List<Book> searchResult = new ArrayList<Book>();

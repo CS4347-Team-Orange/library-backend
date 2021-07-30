@@ -30,6 +30,9 @@ public class LoanService {
     @Autowired
     private BorrowerService borrowerService;
 
+    @Autowired
+    private BookService bookService;
+
     public Loan getLoan(String loanId) {
         Loan l = loanMapper.getById(loanId);
         l = attachBorrower(l);
@@ -133,6 +136,23 @@ public class LoanService {
             throw new ServiceException("Borrower has 3 active loans already, cannot loan more books.");
         }
 
+        Book b;
+        try {
+            b = bookService.getOneById(bookId);
+            if (b == null) {
+                b = bookService.getOneByIsbn10(bookId);
+            }
+            if (b == null) {
+                b = bookService.getOneByIsbn13(bookId);
+            }
+            if (b == null) {
+                throw new ServiceException("Can't locate a book with that ID, ISBN10, or ISBN13.");
+            }
+        } catch (ServiceException e) {
+            log.error(e);
+            throw e;
+        }
+
         try { 
             loanMapper.insert(l);
         } catch (DataAccessException e) { 
@@ -147,7 +167,12 @@ public class LoanService {
         if (! isCheckedOut(bookId)) { 
             throw new ServiceException("Book is not checked out!");
         }
-        Loan l = findActiveLoan(bookId);
+        Loan l;
+        try {
+            l = findActiveLoan(bookId);
+        } catch (ServiceException e) {
+            throw e;
+        }
         if (l == null) {
             throw new ServiceException("Couldn't find active loan for book");
         }
@@ -156,11 +181,22 @@ public class LoanService {
         loanMapper.update(l);
     }
 
-    public Loan findActiveLoan(String bookId) { 
+    public Loan findActiveLoan(String bookId) throws ServiceException {
         List<Loan> loans = loanMapper.getAll();
-        for(Loan l: loans) { 
-            if (l.getDate_in() == null && l.getBook_id().equals(bookId)) {
-                return l;
+        for(Loan l: loans) {
+            try {
+                if (l.getDate_in() == null &&
+                    (
+                        l.getBook_id().equals(bookId) ||
+                        bookService.getOneById(l.getBook_id()).getIsbn10().equals(bookId) ||
+                        bookService.getOneById(l.getBook_id()).getIsbn13().equals(bookId)
+                    )
+                ) {
+                    return l;
+                }
+            } catch (ServiceException e) {
+                log.error(e);
+                throw e;
             }
         }
         return null;
