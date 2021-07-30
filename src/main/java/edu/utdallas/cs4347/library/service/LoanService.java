@@ -148,6 +148,9 @@ public class LoanService {
             throw new ServiceException("Book is not checked out!");
         }
         Loan l = findActiveLoan(bookId);
+        if (l == null) {
+            throw new ServiceException("Couldn't find active loan for book");
+        }
         l.setDate_in(new Date());
         log.info("Checking in: " + l);
         loanMapper.update(l);
@@ -156,7 +159,7 @@ public class LoanService {
     public Loan findActiveLoan(String bookId) { 
         List<Loan> loans = loanMapper.getAll();
         for(Loan l: loans) { 
-            if (l.getDate_in() == null) { 
+            if (l.getDate_in() == null && l.getBook_id().equals(bookId)) {
                 return l;
             }
         }
