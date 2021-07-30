@@ -67,9 +67,19 @@ public class LoanService {
 
     public boolean isCheckedOut(String bookId) throws ServiceException { 
         List<Loan> loans = new ArrayList<Loan>();
-
-        try { 
-            loans = loanMapper.getByBook(bookId);
+        try {
+            Book b = null;
+            b = bookService.getOneById(bookId);
+            if (b == null) {
+                b = bookService.getOneByIsbn10(bookId);
+            }
+            if (b == null) {
+                b = bookService.getOneByIsbn13(bookId);
+            }
+            if (b == null) {
+                throw new ServiceException("Can't locate a book with that ID, ISBN10, or ISBN13.");
+            }
+            loans = loanMapper.getByBook(b.getBookId());
         } catch (Exception e) { 
             log.error("Error getting book from database!", e);
             throw new ServiceException(e.getMessage());
