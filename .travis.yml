@@ -11,6 +11,9 @@ script:
 - bash travis.sh
 env:
   global:
+  - tf_version=1.1.3
+  - TF_HOST=app.terraform.io
+  - TF_ORG=alex4108
   # TF_API_TOKEN
   - secure: cuhABFckn5qoaoPR1+le6LGShAUY0JEO6QE2RxmCdXPCjiKmnET8gIzg+ZrvtgkoNylQdT2inuDXLyvTcgOh8uczH0E9ZuafvdQafnbKItvQK8qEN3BJ1zJuIsrgKK77i9YGpxGkJnbHsC9uqmKfVCNmiHoughG45L2fE1WuA6tJdmGm5z3e5byemQ+RWAuyJu54a+g8bO0ikP9deP/m5HuY80AogFrapW+Ni4dZePamdtn7hjBv9fSlqBy/1hx3V59stU8laAcvLI1snDStYzZ2kWDq+eXPBJesJW3SuU4yWPp05n33NEps5biOyhTipmDr9+qcWvvmlJ6Mz/MX/daDQh2gUlzaUujosgzrSU8AmaR7N8LLj18WdQ/GOTIW1z/EQtU4bahhni6cNfYoIk+7Nq5CMLHgdHXmI0gpOv8KCzmDxrr62qc70AybsB8A03JvXgrHdo60fBRtSKyNVauf0XRlZO8hEFMEopmft86AYUGsBv8UXUD6B7AtIdp7yjbqGTDicwd2O2aPbxm9Alxk2ygPjQFkMg8dnppKUiEME5WB0wl6qdCpRpUPdl/ghoZRl8uU3zSWn1NjT4VajO3NTWz7J3rGWpwYlAwvxIvyZu/r0O+eumD6sny/AAnHD9Sm6riowX6Rx80TVFGtYFJPvnwFEOGBYyJqv1MnkpQ=
   # DOCKER_PASS

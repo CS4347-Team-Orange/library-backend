@@ -22,6 +22,10 @@
           "awslogs-stream-prefix": "${app_name}"
         }
       },
+      "healthCheck": {
+        "command": ["CMD-SHELL", "curl http://localhost:8080/actuator/health"],
+        "startPeriod": 300
+      },
       "portMappings": [ 
         { 
            "containerPort": 8080,

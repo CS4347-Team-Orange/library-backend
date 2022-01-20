@@ -81,7 +81,7 @@ resource "aws_lb_target_group" "this" {
   health_check { 
     enabled             = true
     healthy_threshold   = 3
-    interval            = 10
+    interval            = 15
     matcher             = "200-299"
     path                = "/actuator/health"
     protocol            = "HTTP"
