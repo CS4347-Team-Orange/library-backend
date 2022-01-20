@@ -77,6 +77,7 @@ resource "aws_lb_target_group" "this" {
   protocol  = "HTTP"
   vpc_id    = nonsensitive(data.tfe_outputs.account.values.vpc_id)
   target_type = "ip"
+  deregistration_delay = 90
 
   health_check { 
     enabled             = true
@@ -131,6 +132,7 @@ resource "aws_ecs_service" "main" {
     assign_public_ip = false
   }
 
+  health_check_grace_period_seconds = 60
   load_balancer {
     target_group_arn = aws_lb_target_group.this.arn
     container_name   = local.app_name
@@ -203,5 +205,9 @@ resource "aws_security_group" "lb" {
         to_port          = 0
         protocol         = "-1"
         cidr_blocks      = ["0.0.0.0/0"]
+    }
+
+    lifecycle {    
+      create_before_destroy = true 
     }
 }

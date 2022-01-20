@@ -40,3 +40,4 @@ out/
 terraform/.terraform*
 terraform/config.remote.tfbackend
 *.auto.tfvars
+terraform/*.js
