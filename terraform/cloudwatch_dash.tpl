@@ -82,7 +82,7 @@
             }
         },
         {
-            "height": 7,
+            "height": 6,
             "width": 23,
             "y": 18,
             "x": 0,
@@ -106,7 +106,7 @@
         {
             "height": 6,
             "width": 23,
-            "y": 25,
+            "y": 24,
             "x": 0,
             "type": "metric",
             "properties": {
@@ -131,6 +131,44 @@
                         }
                     ]
                 }
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 32,
+            "width": 23,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "CloudWatchSynthetics", "Failed", "CanaryName", "library-${stage}-hc", { "label": "Failed", "color": "#d62728" } ],
+                    [ ".", "2xx", ".", "library-${stage}-hc", { "label": "Success", "color": "#2ca02c" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${region}",
+                "stat": "Average",
+                "period": 300,
+                "title": "/actuator/health Canary"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 36,
+            "width": 23,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "CloudWatchSynthetics", "2xx", "CanaryName", "library-${stage}-api", { "label": "Success", "color": "#2ca02c" } ],
+                    [ ".", "Failed", ".", ".", { "label": "Failed", "color": "#d62728" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${region}",
+                "stat": "Average",
+                "period": 300,
+                "title": "/api/book Canary"
             }
         }
     ]
