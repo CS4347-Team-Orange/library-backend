@@ -168,7 +168,7 @@
                 "region": "${region}",
                 "stat": "Average",
                 "period": 300,
-                "title": "/api/book Canary"
+                "title": "/api/books Canary"
             }
         }
     ]

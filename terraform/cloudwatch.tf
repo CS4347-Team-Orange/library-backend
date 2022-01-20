@@ -1,5 +1,5 @@
 
-// Canaries
+// Canary Common
 
 resource "aws_s3_bucket" "canaries" { 
     bucket = "${local.app_name}-canaries"
@@ -90,14 +90,14 @@ resource "aws_iam_role_policy_attachment" "canary-policy-attachment" {
   policy_arn = aws_iam_policy.canary_policy.arn
 }
 
-// http://LB:8080/api/book in 300 seconds or less
+// http://LB:8080/api/books in 300 seconds or less
 
 resource "local_file" "canary_api_inline" {
     content  = templatefile("${path.module}/canary_node.tpl", {
       protocol = "http",
       hostname = aws_lb.this.dns_name,
       port = "8080",
-      path = "api/book"
+      path = "api/books"
     })
     filename = "${path.module}/pageLoadBlueprint-api.js"
 }
@@ -158,6 +158,7 @@ resource "aws_cloudwatch_event_target" "canary_event_target_api_book" {
   rule = aws_cloudwatch_event_rule.canary_event_rule_api_book.name
 }
 
+// Canary: Actuator Healthcheck
 
 resource "local_file" "canary_healthcheck_inline" {
     content  = templatefile("${path.module}/canary_node.tpl", {
