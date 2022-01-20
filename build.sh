@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-set -e # Abort on any error 
+set -eo pipefail 
 
-PROJECT_NAME="backend" # db, backend, or frontend
+if [[ "${container_image}" == "" && "${TRAVIS_COMMIT}" == "" ]]; then
+    container_image="alex4108/library-backend"
+fi
 
-# Do what you need to do to prepare for the container's build here.
+docker build -t ${container_image} .
 
-# Build the container
-docker build -t alex4108/library-${PROJECT_NAME} .

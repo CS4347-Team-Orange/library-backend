@@ -1,0 +1,33 @@
+[
+    {
+      "networkMode": "awsvpc",
+      "name": "${name}",
+      "image": "${image}",
+      "essential": true,
+      "cpu": ${cpu},
+      "entryPoint": [
+        "java",
+        "-Dspring.datasource.url=jdbc:postgresql://${db_host}:5432/${db_name}",
+        "-Dspring.datasource.username=${db_username}",
+        "-Dspring.datasource.password=${db_password}",
+        "-Dlogging.level.=INFO",
+        "-jar","/app/spring-boot-application.jar"
+      ],
+      "memory": ${ram},
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-region": "${region}",
+          "awslogs-group": "${app_name}",
+          "awslogs-stream-prefix": "${app_name}"
+        }
+      },
+      "portMappings": [ 
+        { 
+           "containerPort": 8080,
+           "hostPort": 8080,
+           "protocol": "tcp"
+        }
+     ]
+    }
+  ]
