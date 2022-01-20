@@ -63,7 +63,8 @@ data "aws_iam_policy_document" "canary_policy" {
       "cloudwatch:PutMetricData",
       "logs:CreateLogGroup",
       "logs:CreateLogStream",
-      "logs:PutLogEvents"
+      "logs:PutLogEvents",
+      "events:*"
     ]
     resources = ["*"]
   }
