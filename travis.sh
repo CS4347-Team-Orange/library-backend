@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
 
-set -e
-set -o pipefail
+set -euo pipefail
 
-if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]]; then
-    echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
-fi
+echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
+
+export container_registry="registry.hub.docker.com"
+export container_image="alex4108/library-backend:${TRAVIS_COMMIT}"
+export container_uri="${container_registry}/${container_image}"
+
 bash build.sh
 bash test.sh
-if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]]; then
-    docker push alex4108/library-backend
-fi
+
+docker push ${container_image}
+
+cd terraform && bash ci.sh

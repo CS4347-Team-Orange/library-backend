@@ -35,3 +35,9 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Terraform ###
+terraform/.terraform*
+terraform/config.remote.tfbackend
+*.auto.tfvars
+terraform/*.js
