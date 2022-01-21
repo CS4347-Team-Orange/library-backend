@@ -5,6 +5,8 @@ resource "aws_s3_bucket" "canaries" {
     bucket = "${local.app_name}-canaries"
     acl    = "private"
 
+    force_destroy = true
+    
     versioning { 
         enabled = true
     }
@@ -97,7 +99,7 @@ resource "local_file" "canary_api_inline" {
       protocol = "http",
       hostname = aws_lb.this.dns_name,
       port = "8080",
-      path = "api/books"
+      path = "api/books/"
     })
     filename = "${path.module}/pageLoadBlueprint-api.js"
 }
